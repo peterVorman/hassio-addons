@@ -8,7 +8,9 @@ COPY rootfs /
 # Setup base
 RUN apk add --no-cache \
     coreutils=9.7-r1 \
-    wget=1.25.0-r1
+    wget=1.25.0-r1 \
+    python3=3.12.12-r0 \
+    py3-pip=25.1.1-r1
 
 # Build arguments
 ARG BUILD_ARCH
@@ -38,3 +40,12 @@ LABEL \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+
+COPY . /app
+WORKDIR /app
+
+# Скрипт запуску
+CMD [ "/app/run.sh" ]
