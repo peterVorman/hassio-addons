@@ -3,7 +3,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:19.0.0
 FROM ${BUILD_FROM}
 
 # Copy root filesystem
-COPY rootfs /
+# COPY rootfs /
 
 # Setup base
 RUN apk add --no-cache \
@@ -44,7 +44,10 @@ LABEL \
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-COPY . /app
+COPY /app /app
+
+RUN chmod +x /app/run.sh
+
 WORKDIR /app
 
 # Скрипт запуску
